@@ -32,7 +32,7 @@ fun Route.clothes() {
             )
 
             when(ClothDAOImpl.create(
-                cloth.name, cloth.link
+                cloth.name, cloth.link, cloth.image
             )) {
                 1 -> call.respond(HttpStatusCode.OK, "Cloth created")
                 else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")
