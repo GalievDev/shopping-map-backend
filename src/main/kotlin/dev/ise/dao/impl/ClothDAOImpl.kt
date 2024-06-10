@@ -4,7 +4,7 @@ import dev.ise.dao.ClothDAO
 import dev.ise.dto.Cloth
 
 object ClothDAOImpl: ClothDAO {
-    override fun create(name: String, link: String): Int {
+    override fun create(name: String, link: String, image: ByteArray): Int {
         TODO("Not yet implemented")
     }
 
