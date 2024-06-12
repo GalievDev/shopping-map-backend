@@ -8,7 +8,7 @@ import io.ktor.server.routing.*
 fun Application.configureRouting() {
     routing {
         indexRoute()
-        route("v1") {
+        route("api/v1") {
             clothes()
         }
     }

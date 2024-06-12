@@ -1,7 +1,7 @@
 package dev.ise.routing.v1
 
 import dev.ise.dao.impl.ClothDAOImpl
-import dev.ise.dto.Cloth
+import dev.ise.request.ClothRequest
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -25,14 +25,14 @@ fun Route.clothes() {
             call.respond(cloth)
         }
         post {
-            val cloth = call.receive<Cloth>()
+            val cloth = call.receive<ClothRequest>()
 
             if (cloth.name.isBlank()) return@post call.respond(
                 HttpStatusCode.BadRequest, "Name cannot be blank"
             )
 
             when(ClothDAOImpl.create(
-                cloth.name, cloth.link, cloth.image
+                cloth.name, cloth.link, cloth.byteArray
             )) {
                 1 -> call.respond(HttpStatusCode.OK, "Cloth created")
                 else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")
