@@ -7,7 +7,10 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
+@OptIn(ExperimentalEncodingApi::class)
 fun Route.clothes() {
     route("/clothes") {
         get {
@@ -26,13 +29,14 @@ fun Route.clothes() {
         }
         post {
             val cloth = call.receive<ClothRequest>()
+            val image = Base64.decode(cloth.image)
 
             if (cloth.name.isBlank()) return@post call.respond(
                 HttpStatusCode.BadRequest, "Name cannot be blank"
             )
 
             when(ClothDAOImpl.create(
-                cloth.name, cloth.link, cloth.byteArray
+                cloth.name, cloth.link, image
             )) {
                 1 -> call.respond(HttpStatusCode.OK, "Cloth created")
                 else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")

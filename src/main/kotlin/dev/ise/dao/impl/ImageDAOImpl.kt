@@ -4,11 +4,18 @@ import dev.ise.dao.ImageDAO
 import dev.ise.dto.Image
 import dev.ise.mics.Database.query
 import dev.ise.mics.Database.update
-import java.sql.Statement
 
 object ImageDAOImpl: ImageDAO {
-    override fun create(name: String, byteArray: ByteArray): Statement? =
-        update("INSERT INTO images(name, byteArray) VALUES ('$name', $byteArray)")
+    override fun create(name: String, byteArray: ByteArray): Int? {
+        update("INSERT INTO images(name, byteArray) VALUES ('$name', $byteArray) RETURNING ID")
+        var id: Int? = null
+        query("SELECT id, id FROM images") { resultSet ->
+            if (resultSet.next()) {
+                id = resultSet.getInt("id")
+            }
+        }
+        return id
+    }
 
     override fun delete(id: Int): Int {
         TODO("Not yet implemented")

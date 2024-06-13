@@ -4,7 +4,6 @@ import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.intellij.lang.annotations.Language
 import java.sql.ResultSet
-import java.sql.Statement
 
 object Database {
     private val dataSource: HikariDataSource by lazy {
@@ -32,14 +31,14 @@ object Database {
         }.onFailure { println(it.localizedMessage) }
     }
 
-    fun update(@Language("PostgreSQL") sql: String): Statement? {
+    fun update(@Language("PostgreSQL") sql: String): Int {
         runCatching {
             dataStore().connection.use { connection ->
-                val statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
-                statement.executeUpdate(sql)
-                return statement
+                connection.createStatement().use { statement ->
+                    return statement.executeUpdate(sql)
+                }
             }
         }.onFailure { println(it.localizedMessage) }
-        return null
+        return -1
     }
 }
