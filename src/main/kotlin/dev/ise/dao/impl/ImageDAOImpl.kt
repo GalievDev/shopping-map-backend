@@ -7,7 +7,7 @@ import dev.ise.mics.Database.update
 
 object ImageDAOImpl: ImageDAO {
     override fun create(name: String, byteArray: ByteArray): Int? {
-        update("INSERT INTO images(name, byteArray) VALUES ('$name', $byteArray) RETURNING ID")
+        update("INSERT INTO images(name, bytes) VALUES ('$name', '$byteArray') RETURNING ID")
         var id: Int? = null
         query("SELECT id, id FROM images") { resultSet ->
             if (resultSet.next()) {

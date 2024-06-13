@@ -10,7 +10,7 @@ object ClothDAOImpl: ClothDAO {
     override fun create(name: String, link: String, image: ByteArray): Int {
         val id = ImageDAOImpl.create(name, image)
         return if (id != null) {
-            return update("INSERT INTO clothes(name, link, image_id) VALUES('$name', '$link', $id))")
+            return update("INSERT INTO clothes(name, link, image_id) VALUES('$name', '$link', '$id' )")
         } else {
             -1
         }
@@ -21,7 +21,7 @@ object ClothDAOImpl: ClothDAO {
     }
 
     override fun getAll(): List<Cloth> = mutableListOf<Cloth>().apply {
-        query("SELECT clothes.id, clothes.name, clothes.image_id, images.id, images.name, images.bytes FROM clothes JOIN images ON clothes.image_id = images.id") { resultSet ->
+        query("SELECT clothes.id, clothes.name, clothes.link, clothes.image_id, images.id, images.name, images.bytes FROM clothes JOIN images ON clothes.image_id = images.id") { resultSet ->
             while (resultSet.next()) {
                 add(
                     Cloth(
