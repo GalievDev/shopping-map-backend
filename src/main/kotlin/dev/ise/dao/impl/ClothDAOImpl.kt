@@ -7,10 +7,10 @@ import dev.ise.mics.Database.query
 import dev.ise.mics.Database.update
 
 object ClothDAOImpl: ClothDAO {
-    override fun create(name: String, link: String, image: ByteArray): Int {
+    override fun create(name: String, link: String, description: String, image: ByteArray): Int {
         val id = ImageDAOImpl.create(name, image)
         return if (id != null) {
-            return update("INSERT INTO clothes(name, link, image_id) VALUES('$name', '$link', '$id' )")
+            return update("INSERT INTO clothes(name, link, description, image_id) VALUES('$name', '$link', '$description', '$id' )")
         } else {
             -1
         }
@@ -35,7 +35,7 @@ object ClothDAOImpl: ClothDAO {
     override fun getById(id: Int): Cloth? {
         var cloth: Cloth? = null
 
-        query("SELECT clothes.id, clothes.name, clothes.link, images.bytes FROM clothes JOIN images ON clothes.image_id = images.id WHERE clothes.id IN($id) LIMIT 1") { resultSet ->
+        query("SELECT clothes.id, clothes.name, clothes.link, clothes.description, images.bytes FROM clothes JOIN images ON clothes.image_id = images.id WHERE clothes.id IN($id) LIMIT 1") { resultSet ->
             while (resultSet.next()) {
                 cloth = Cloth(
                     resultSet.getInt("id"), resultSet.getString("name"), resultSet.getString("link"), resultSet.getString("description"), Image(
