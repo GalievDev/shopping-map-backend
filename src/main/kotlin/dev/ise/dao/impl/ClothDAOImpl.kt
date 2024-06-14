@@ -16,9 +16,7 @@ object ClothDAOImpl: ClothDAO {
         }
     }
 
-    override fun deleteById(id: Int): Int {
-        return update("DELETE FROM clothes WHERE id IN($id)")
-    }
+    override fun deleteById(id: Int): Int = update("DELETE FROM clothes WHERE id IN($id)")
 
     override fun getAll(): List<Cloth> = mutableListOf<Cloth>().apply {
         query("SELECT clothes.id, clothes.name, clothes.link, clothes.image_id, images.id, images.name, images.bytes FROM clothes JOIN images ON clothes.image_id = images.id") { resultSet ->
