@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 data class Image(
     val id: Int = -1,
     val name: String = "",
-    val byteArray: ByteArray = ByteArray(0)
+    val bytes: ByteArray = ByteArray(0)
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -15,14 +15,14 @@ data class Image(
         other as Image
 
         if (name != other.name) return false
-        if (!byteArray.contentEquals(other.byteArray)) return false
+        if (!bytes.contentEquals(other.bytes)) return false
 
         return true
     }
 
     override fun hashCode(): Int {
         var result = name.hashCode()
-        result = 31 * result + byteArray.contentHashCode()
+        result = 31 * result + bytes.contentHashCode()
         return result
     }
 }

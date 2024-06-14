@@ -6,8 +6,8 @@ import dev.ise.mics.Database.query
 import dev.ise.mics.Database.update
 
 object ImageDAOImpl: ImageDAO {
-    override fun create(name: String, byteArray: ByteArray): Int? {
-        update("INSERT INTO images(name, bytes) VALUES ('$name', '$byteArray') RETURNING ID")
+    override fun create(name: String, bytes: ByteArray): Int? {
+        update("INSERT INTO images(name, bytes) VALUES ('$name', '$bytes') RETURNING ID")
         var id: Int? = null
         query("SELECT id, id FROM images") { resultSet ->
             if (resultSet.next()) {
@@ -27,7 +27,7 @@ object ImageDAOImpl: ImageDAO {
         query("SELECT images.id, images.name, images.byteArray ON images.id = id WHERE images.id IN($id) LIMIT 1") { resultSet ->
             while (resultSet.next()) {
                 image = Image(
-                    resultSet.getInt("id"), resultSet.getString("name"), resultSet.getBytes("byteArray")
+                    resultSet.getInt("id"), resultSet.getString("name"), resultSet.getBytes("bytes")
                 )
             }
         }
