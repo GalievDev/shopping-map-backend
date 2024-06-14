@@ -7,5 +7,6 @@ data class Cloth(
     val id: Int = -1,
     val name: String = "",
     val link: String = "",
+    val description: String = "",
     val image_id: Int = -1,
 )

@@ -25,7 +25,7 @@ object ClothDAOImpl: ClothDAO {
             while (resultSet.next()) {
                 add(
                     Cloth(
-                        resultSet.getInt("id"), resultSet.getString("name"), resultSet.getString("link"), Image(
+                        resultSet.getInt("id"), resultSet.getString("name"), resultSet.getString("link"), resultSet.getString("description"), Image(
                             resultSet.getInt("id"), resultSet.getString("name"), resultSet.getBytes("bytes")
                         ).id
                     )
@@ -40,7 +40,7 @@ object ClothDAOImpl: ClothDAO {
         query("SELECT clothes.id, clothes.name, clothes.link, images.byteArray FROM clothes JOIN images ON clothes.image_id = images.id WHERE clothes.id IN($id) LIMIT 1") { resultSet ->
             while (resultSet.next()) {
                 cloth = Cloth(
-                    resultSet.getInt("id"), resultSet.getString("name"), resultSet.getString("link"), Image(
+                    resultSet.getInt("id"), resultSet.getString("name"), resultSet.getString("link"), resultSet.getString("description"), Image(
                         resultSet.getInt("id"), resultSet.getString("name"), resultSet.getBytes("bytes")
                     ).id
                 )
