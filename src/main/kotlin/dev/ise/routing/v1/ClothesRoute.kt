@@ -42,5 +42,19 @@ fun Route.clothes() {
                 else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")
             }
         }
+        delete("{id}") {
+            val id = call.parameters["id"]?.toIntOrNull() ?: return@delete call.respond(
+                HttpStatusCode.BadRequest, "Cloth id must be a number"
+            )
+
+            val cloth = ClothDAOImpl.getById(id) ?: return@delete call.respond(
+                HttpStatusCode.NotFound, "Cloth not found"
+            )
+
+            when(ClothDAOImpl.deleteById(cloth.id)) {
+                1 -> call.respond(HttpStatusCode.OK, "Cloth deleted")
+                else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")
+            }
+        }
     }
 }
