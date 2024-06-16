@@ -38,7 +38,7 @@ object OutfitDAOImpl : OutfitDAO {
 
     override fun getById(id: Int) : Outfit? {
         var returnVal : Outfit? = null
-        query("SELECT outfit.name, outfit.description, outfit.image_id FROM outfit WHERE outfit.id = $id LIMIT 1") {
+        query("SELECT outfit.name, outfit.description, outfit.image_id FROM outfit WHERE outfit.id IN($id) LIMIT 1") {
             resultSet ->
             returnVal = Outfit(id, resultSet.getString("name"),
                 resultSet.getString("description"),
