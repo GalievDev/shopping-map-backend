@@ -9,7 +9,7 @@ object ImageDAOImpl: ImageDAO {
     override fun create(name: String, bytes: ByteArray): Int? {
         update("INSERT INTO images(name, bytes) VALUES ('$name', '$bytes') RETURNING ID")
         var id: Int? = null
-        query("SELECT id, id FROM images") { resultSet ->
+        query("SELECT id FROM images") { resultSet ->
             if (resultSet.next()) {
                 id = resultSet.getInt("id")
             }
@@ -17,9 +17,7 @@ object ImageDAOImpl: ImageDAO {
         return id
     }
 
-    override fun delete(id: Int): Int {
-        TODO("Not yet implemented")
-    }
+    override fun delete(id: Int): Int = update("DELETE FROM images WHERE id IN($id)")
 
     override fun getById(id: Int): Image? {
         var image: Image? = null

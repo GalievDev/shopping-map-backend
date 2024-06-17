@@ -8,10 +8,10 @@ import dev.ise.mics.Database.query
 import dev.ise.mics.Database.update
 
 object ClothDAOImpl: ClothDAO {
-    override fun create(name: String, link: String, description: String, image: ByteArray, clothType: ClothType): Int {
+    override fun create(name: String, link: String, description: String, clothType: ClothType, image: ByteArray): Int {
         val id = ImageDAOImpl.create(name, image)
         return if (id != null) {
-            return update("INSERT INTO clothes(name, link, description, image_id, type) VALUES('$name', '$link', '$description', '$id', '$clothType')")
+            return update("INSERT INTO clothes(name, link, description, type, image_id) VALUES('$name', '$link', '$description', '$clothType', '$id')")
         } else {
             -1
         }
