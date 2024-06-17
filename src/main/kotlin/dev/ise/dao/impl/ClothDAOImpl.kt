@@ -2,15 +2,16 @@ package dev.ise.dao.impl
 
 import dev.ise.dao.ClothDAO
 import dev.ise.dto.Cloth
+import dev.ise.dto.ClothType
 import dev.ise.dto.Image
 import dev.ise.mics.Database.query
 import dev.ise.mics.Database.update
 
 object ClothDAOImpl: ClothDAO {
-    override fun create(name: String, link: String, description: String, image: ByteArray): Int {
+    override fun create(name: String, link: String, description: String, image: ByteArray, clothType: ClothType): Int {
         val id = ImageDAOImpl.create(name, image)
         return if (id != null) {
-            return update("INSERT INTO clothes(name, link, description, image_id) VALUES('$name', '$link', '$description', '$id' )")
+            return update("INSERT INTO clothes(name, link, description, image_id, type) VALUES('$name', '$link', '$description', '$id', '$clothType')")
         } else {
             -1
         }
