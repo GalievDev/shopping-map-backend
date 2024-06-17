@@ -1,7 +1,6 @@
 package dev.ise.routing.v1
 
 import dev.ise.dao.impl.ClothDAOImpl
-import dev.ise.dao.impl.ImageDAOImpl
 import dev.ise.request.ClothRequest
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -52,7 +51,6 @@ fun Route.clothes() {
                 HttpStatusCode.NotFound, "Cloth not found"
             )
 
-            ImageDAOImpl.delete(cloth.image_id)
             when(ClothDAOImpl.deleteById(cloth.id)) {
                 1 -> call.respond(HttpStatusCode.OK, "Cloth deleted")
                 else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")
