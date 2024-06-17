@@ -8,6 +8,6 @@ data class Cloth(
     val name: String = "",
     val link: String = "",
     val description: String = "",
-    val image_id: Int = -1,
     val type: ClothType = ClothType.NONE,
+    val image_id: Int = -1,
 )
