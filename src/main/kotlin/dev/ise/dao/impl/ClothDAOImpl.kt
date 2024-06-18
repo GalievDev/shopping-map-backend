@@ -8,7 +8,7 @@ import dev.ise.mics.Database.query
 import dev.ise.mics.Database.update
 
 object ClothDAOImpl: ClothDAO {
-    override fun create(name: String, link: String, description: String, clothType: ClothType, image: ByteArray): Int {
+    override fun create(name: String, link: String, description: String, clothType: ClothType, image: String): Int {
         val id = ImageDAOImpl.create(name, image)
         return if (id != null) {
             return update("INSERT INTO clothes(name, link, description, type, image_id) VALUES('$name', '$link', '$description', '$clothType', '$id')")
@@ -27,7 +27,7 @@ object ClothDAOImpl: ClothDAO {
                         resultSet.getInt("id"), resultSet.getString("name"),
                         resultSet.getString("link"), resultSet.getString("description"), ClothType.valueOf(resultSet.getString("type")),
                         Image(
-                            resultSet.getInt("id"), resultSet.getString("name"), resultSet.getBytes("bytes")
+                            resultSet.getInt("id"), resultSet.getString("name"), resultSet.getString("bytes")
                         ).id
                     )
                 )
@@ -44,7 +44,7 @@ object ClothDAOImpl: ClothDAO {
                     resultSet.getInt("id"), resultSet.getString("name"),
                     resultSet.getString("link"), resultSet.getString("description"), ClothType.valueOf(resultSet.getString("type")),
                     Image(
-                        resultSet.getInt("id"), resultSet.getString("name"), resultSet.getBytes("bytes")
+                        resultSet.getInt("id"), resultSet.getString("name"), resultSet.getString("bytes")
                     ).id
                 )
             }

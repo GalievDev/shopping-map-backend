@@ -7,7 +7,7 @@ import dev.ise.mics.Database.update
 
 
 object OutfitDAOImpl : OutfitDAO {
-    override fun create(name: String, description: String, outfitClothIds: List<Int>, image: ByteArray): Int {
+    override fun create(name: String, description: String, outfitClothIds: List<Int>, image: String): Int {
         val imageId = ImageDAOImpl.create(name, image)
         if (imageId == -1) return -1
         val outfitId: Int = update("INSERT INTO outfits(name, description, image_id)" +
