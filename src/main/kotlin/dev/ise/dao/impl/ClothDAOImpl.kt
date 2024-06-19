@@ -8,13 +8,8 @@ import dev.ise.mics.Database.query
 import dev.ise.mics.Database.update
 
 object ClothDAOImpl: ClothDAO {
-    override fun create(name: String, link: String, description: String, clothType: ClothType, image: String): Int {
-        val id = ImageDAOImpl.create(name, image)
-        return if (id != null) {
-            return update("INSERT INTO clothes(name, link, description, type, image_id) VALUES('$name', '$link', '$description', '$clothType', '$id')")
-        } else {
-            -1
-        }
+    override fun create(name: String, link: String, description: String, clothType: ClothType, image_id: Int): Int {
+        return update("INSERT INTO clothes(name, link, description, type, image_id) VALUES('$name', '$link', '$description', '$clothType', '$image_id')")
     }
 
     override fun deleteById(id: Int): Int = update("DELETE FROM clothes WHERE id IN($id)")
