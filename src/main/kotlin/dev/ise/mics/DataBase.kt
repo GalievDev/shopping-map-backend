@@ -41,4 +41,18 @@ object Database {
         }.onFailure { println(it.localizedMessage) }
         return -1
     }
+
+    fun updateWithId(@Language("PostgreSQL") sql: String): Int {
+        runCatching {
+            dataStore().connection.use { connection ->
+                connection.createStatement().use { statement ->
+                    val resultSet = statement.executeQuery(sql)
+                    if (resultSet.next()) {
+                        return resultSet.getInt("id")
+                    }
+                }
+            }
+        }.onFailure { println(it.localizedMessage) }
+        return -1
+    }
 }

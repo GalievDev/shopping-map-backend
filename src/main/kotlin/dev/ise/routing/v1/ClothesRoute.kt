@@ -1,15 +1,16 @@
 package dev.ise.routing.v1
 
+import dev.ise.client.ImageProcesses
 import dev.ise.dao.impl.ClothDAOImpl
+import dev.ise.dao.impl.ImageDAOImpl
+import dev.ise.dto.Image
 import dev.ise.request.ClothRequest
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlin.io.encoding.ExperimentalEncodingApi
 
-@OptIn(ExperimentalEncodingApi::class)
 fun Route.clothes() {
     route("/clothes") {
         get {
@@ -33,8 +34,14 @@ fun Route.clothes() {
                 HttpStatusCode.BadRequest, "Name cannot be blank"
             )
 
+            val rembgImg = ImageProcesses.remImgBg(Image(1, cloth.name, cloth.image))
+
+            val image = ImageDAOImpl.create(
+                cloth.name, rembgImg
+            )
+
             when(ClothDAOImpl.create(
-                cloth.name, cloth.link, cloth.description, cloth.type, cloth.image
+                cloth.name, cloth.link, cloth.description, cloth.type, image
             )) {
                 1 -> call.respond(HttpStatusCode.OK, "Cloth created")
                 else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")

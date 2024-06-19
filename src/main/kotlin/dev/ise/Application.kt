@@ -1,6 +1,9 @@
 package dev.ise
 
-import dev.ise.plugins.*
+import dev.ise.plugins.configureHTTP
+import dev.ise.plugins.configureMonitoring
+import dev.ise.plugins.configureRouting
+import dev.ise.plugins.configureSerialization
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
