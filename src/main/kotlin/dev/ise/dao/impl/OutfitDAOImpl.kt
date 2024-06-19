@@ -4,37 +4,40 @@ import dev.ise.dao.OutfitDAO
 import dev.ise.dto.Outfit
 import dev.ise.mics.Database.query
 import dev.ise.mics.Database.update
+import dev.ise.mics.Database.updateWithId
 
 
 object OutfitDAOImpl : OutfitDAO {
     override fun create(name: String, description: String, outfitClothIds: List<Int>, image: String): Int {
-        val imageId = ImageDAOImpl.create(name, image)
-        if (imageId == -1) return -1
-        val outfitId: Int = update("INSERT INTO outfits(name, description, image_id)" +
-                " VALUES('$name', '$description', '$imageId') RETURNING id")
+        val outfitId: Int = updateWithId(
+            "INSERT INTO outfits(name, description, image_id) VALUES ('$name', '$description', 1) RETURNING id"
+        )
         if (outfitId == -1) return -1
-        var outfitKeysString = ""
-        for (i in 0..<outfitClothIds.size) {
-            outfitKeysString += "$outfitId, "
+
+        outfitClothIds.forEach { id ->
+            return update("INSERT INTO outfits_clothes(outfit_id, cloth_id) VALUES ('$outfitId', '$id')")
         }
-        outfitKeysString += outfitId
-        return update("INSERT INTO outfits_clothes ($outfitKeysString) VALUES" +
-                " (${outfitClothIds.joinToString(", ")})")
+        return -1
     }
 
     override fun deleteById(id: Int): Int = update("DELETE FROM outfits WHERE id IN($id)")
 
     override fun getAll(): List<Outfit> = mutableListOf<Outfit>().apply {
-        query(
-            "SELECT id, name, description, image_id FROM outfits"
+        query("""
+                SELECT o.id, o.name, o.description, o.image_id, ARRAY_AGG(oc.cloth_id) AS cloth_ids FROM outfits o 
+                LEFT JOIN outfits_clothes oc ON o.id = oc.outfit_id 
+                GROUP BY o.id
+                """
         ) { resultSet ->
             while (resultSet.next()) {
+                val clothes: Array<Int> = resultSet.getArray("cloth_ids").array as Array<Int>
                 add(
                     Outfit(
                         resultSet.getInt("id"),
                         resultSet.getString("name"),
                         resultSet.getString("description"),
                         resultSet.getInt("image_id"),
+                        clothes.toList()
                     )
                 )
             }
@@ -43,13 +46,23 @@ object OutfitDAOImpl : OutfitDAO {
 
     override fun getById(id: Int): Outfit? {
         var returnVal: Outfit? = null
-        query("SELECT name, description, image_id FROM outfits WHERE outfits.id IN($id) LIMIT 1") { resultSet ->
-            returnVal = Outfit(
-                id,
-                resultSet.getString("name"),
-                resultSet.getString("description"),
-                resultSet.getInt("image_id"),
-            )
+        query(
+            """
+            SELECT o.id, o.name, o.description, o.image_id, ARRAY_AGG(oc.cloth_id) AS cloth_ids FROM outfits o 
+            LEFT JOIN outfits_clothes oc ON o.id = oc.outfit_id
+            WHERE o.id IN($id) GROUP BY o.id
+            """
+        ) { resultSet ->
+            if (resultSet.next()) {
+                val clothes: Array<Int> = resultSet.getArray("cloth_ids").array as Array<Int>
+                returnVal = Outfit(
+                    id,
+                    resultSet.getString("name"),
+                    resultSet.getString("description"),
+                    resultSet.getInt("image_id"),
+                    clothes.toList()
+                )
+            }
         }
         return returnVal
     }
