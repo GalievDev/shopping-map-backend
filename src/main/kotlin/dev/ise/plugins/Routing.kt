@@ -1,6 +1,7 @@
 package dev.ise.plugins
 
 import dev.ise.routing.indexRoute
+import dev.ise.routing.v1.capsules
 import dev.ise.routing.v1.clothes
 import dev.ise.routing.v1.images
 import dev.ise.routing.v1.outfits
@@ -14,6 +15,7 @@ fun Application.configureRouting() {
             clothes()
             images()
             outfits()
+            capsules()
         }
     }
 }
