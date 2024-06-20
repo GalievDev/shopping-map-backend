@@ -56,7 +56,7 @@ fun Route.clothes() {
                 HttpStatusCode.NotFound, "Cloth not found"
             )
 
-            when(ClothDAOImpl.deleteById(cloth.id)) {
+            when(ClothDAOImpl.delete(cloth.id)) {
                 1 -> call.respond(HttpStatusCode.OK, "Cloth deleted")
                 else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")
             }

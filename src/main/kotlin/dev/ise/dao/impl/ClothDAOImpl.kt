@@ -12,7 +12,7 @@ object ClothDAOImpl: ClothDAO {
         return update("INSERT INTO clothes(name, link, description, type, image_id) VALUES('$name', '$link', '$description', '$clothType', '$image_id')")
     }
 
-    override fun deleteById(id: Int): Int = update("DELETE FROM clothes WHERE id IN($id)")
+    override fun delete(id: Int): Int = update("DELETE FROM clothes WHERE id IN($id)")
 
     override fun getAll(): List<Cloth> = mutableListOf<Cloth>().apply {
         query("SELECT *, images.id, images.name, images.bytes FROM clothes JOIN images ON clothes.image_id = images.id") { resultSet ->

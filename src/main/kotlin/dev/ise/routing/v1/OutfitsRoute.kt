@@ -25,6 +25,7 @@ fun Route.outfits() {
 
             call.respond(outfit)
         }
+
         post {
             val outfit = call.receive<Outfit>()
 
@@ -33,9 +34,24 @@ fun Route.outfits() {
             )
 
             when (OutfitDAOImpl.create(
-                outfit.name, outfit.description, outfit.clothes, "dsfsdfsd"
+                outfit.name, outfit.description, outfit.clothes, 1
             )) {
                 1 -> call.respond(HttpStatusCode.OK, "Outfit created")
+                else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")
+            }
+        }
+
+        delete("/{id}") {
+            val id = call.parameters["id"]?.toIntOrNull() ?: return@delete call.respond(
+                HttpStatusCode.BadRequest, "Outfit id must be a number"
+            )
+
+            val outfit = OutfitDAOImpl.getById(id) ?: return@delete call.respond(
+                HttpStatusCode.NotFound, "Outfit not found"
+            )
+
+            when(OutfitDAOImpl.delete(outfit.id)) {
+                1 -> call.respond(HttpStatusCode.OK, "Outfit deleted")
                 else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")
             }
         }
