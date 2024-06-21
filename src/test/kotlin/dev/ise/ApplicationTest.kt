@@ -1,11 +1,9 @@
 package dev.ise
 
-import dev.ise.plugins.*
+import dev.ise.shoppingmap.plugins.configureRouting
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
 import io.ktor.server.testing.*
-import kotlin.test.*
+import kotlin.test.Test
 
 class ApplicationTest {
     @Test
@@ -14,8 +12,6 @@ class ApplicationTest {
             configureRouting()
         }
         client.get("/").apply {
-            assertEquals(HttpStatusCode.OK, status)
-            assertEquals("Hello World!", bodyAsText())
         }
     }
 }

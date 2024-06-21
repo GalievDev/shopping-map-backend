@@ -13,10 +13,7 @@ group = "dev.ise"
 version = "0.0.1"
 
 application {
-    mainClass.set("dev.ise.ApplicationKt")
-
-    val isDevelopment: Boolean = project.ext.has("development")
-    applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
+    mainClass.set("$group.shoppingmap.ApplicationKt")
 }
 
 repositories {
