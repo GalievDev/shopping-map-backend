@@ -11,7 +11,7 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 
 object ImageProcesses {
-    private const val url: String = "http://10.90.136.54"
+    private const val url: String = "http://10.90.136.54:5050"
     private val client: HttpClient = HttpClient(CIO).config {
         install(ContentNegotiation) {
             json(
