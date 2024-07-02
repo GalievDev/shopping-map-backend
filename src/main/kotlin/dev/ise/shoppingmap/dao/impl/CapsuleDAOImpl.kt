@@ -13,10 +13,11 @@ object CapsuleDAOImpl: CapsuleDAO {
         )
         if (capsuleId == -1) return -1
 
+        var executionCode: Int = -1
         outfits.forEach { id ->
-            return update("INSERT INTO capsules_outfits(capsule_id, outfit_id) VALUES ('$capsuleId', '$id')")
+            executionCode = update("INSERT INTO capsules_outfits(capsule_id, outfit_id) VALUES ('$capsuleId', '$id')")
         }
-        return -1
+        return executionCode
     }
 
     override fun delete(id: Int): Int = update("DELETE FROM outfits WHERE id IN($id)")
