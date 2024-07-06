@@ -1,0 +1,44 @@
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  DOCKER_DRIVER: overlay2
+  POSTGRES_HOST: $POSTGRES_HOST
+  POSTGRES_PORT: $POSTGRES_PORT
+  POSTGRES_DB: $POSTGRES_DB
+  POSTGRES_USER: $POSTGRES_USER
+  POSTGRES_PASS: $POSTGRES_PASS
+
+cache:
+  paths:
+    - .m2/repository
+    - ~/.gradle
+
+build_ktor:
+  stage: build
+  script:
+    - ./gradlew clean build
+  artifacts:
+    paths:
+      - build/libs/
+  tags:
+    - shared
+
+test_ktor:
+  stage: test
+  script:
+    - ./gradlew test
+  tags:
+    - shared
+
+deploy_ktor:
+  stage: deploy
+  script:
+    - docker build -t ktor-app .
+    - docker run -d -e POSTGRES_HOST=$POSTGRES_HOST POSTGRES_PORT=$POSTGRES_PORT POSTGRES_DB=$POSTGRES_DB POSTGRES_USER=$POSTGRES_USER POSTGRES_PASS=$POSTGRES_PASS ktor-app
+  only:
+    - main
+  tags:
+    - shared
