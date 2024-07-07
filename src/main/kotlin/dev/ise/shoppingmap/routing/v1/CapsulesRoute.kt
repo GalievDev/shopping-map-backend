@@ -31,6 +31,10 @@ fun Route.capsules() {
                 HttpStatusCode.BadRequest, "Name cannot be blank"
             )
 
+            if (capsule.outfits.isEmpty()) return@post call.respond(
+                HttpStatusCode.BadRequest, "Outfits ids cannot be blank"
+            )
+
             when (CapsuleDAOImpl.create(
                 capsule.name, capsule.description, capsule.outfits, 1
             )) {

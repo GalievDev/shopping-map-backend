@@ -37,6 +37,9 @@ class ApplicationTest {
             println(status)
             assertEquals(HttpStatusCode.OK, status)
         }
+/*        client.post("api/v1/clothes").apply {
+            assertEquals(HttpStatusCode.Created, status)
+        }*/
     }
 
     @Test

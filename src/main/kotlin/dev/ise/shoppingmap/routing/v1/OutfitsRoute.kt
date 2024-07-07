@@ -33,6 +33,10 @@ fun Route.outfits() {
                 HttpStatusCode.BadRequest, "Name cannot be blank"
             )
 
+            if (outfit.clothes.isEmpty()) return@post call.respond(
+                HttpStatusCode.BadRequest, "Clothes ids cannot be blank"
+            )
+
             when (OutfitDAOImpl.create(
                 outfit.name, outfit.description, outfit.clothes, 1
             )) {
