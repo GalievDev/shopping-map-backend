@@ -1,0 +1,23 @@
+# Changelog
+
+[Semantic Version] 2024-07-08
+
+Upgrading notes for project are stored here.
+
+Added
+
+shopping-map-backend 1.0.0 Routing & CLothes and images logic
+shopping-map-backend 1.0.1 DataBase implementation
+shopping-map-backend 1.0.2 Image DTO & DAO
+shopping-map-backend 1.0.3 Bug fixes
+shopping-map-backend 1.0.4 Description & DAO fixes
+shopping-map-backend 1.1.0 Route fix & **delete** feature
+shopping-map-backend 1.1.1 Cloth types
+shopping-map-backend 1.1.2 Image routing & image DAO fix
+shopping-map-backend 1.1.3 Image & Cloth DTO fix
+shopping-map-backend 1.1.4 Image creating & encoding fix
+shopping-map-backend 1.1.5 Outfit routing
+shopping-map-backend 1.1.6 Renaming DAO & routes
+shopping-map-backend 1.1.7 Capsules DAO, DTO and routing
+shopping-map-backend 1.1.8 Handling 401 request
+shopping-map-backend 1.1.9 Unit tests
