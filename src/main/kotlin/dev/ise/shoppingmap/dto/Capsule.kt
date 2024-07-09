@@ -8,5 +8,5 @@ data class Capsule(
     val name: String = "",
     val description: String = "",
     val image_id: Int = -1,
-    val outfits: List<Int> = listOf()
+    val outfits: List<Int>
 )

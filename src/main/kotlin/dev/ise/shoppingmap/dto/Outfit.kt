@@ -8,5 +8,5 @@ data class Outfit(
     val name: String = "",
     val description: String = "",
     val image_id: Int = -1,
-    val clothes: List<Int> = listOf()
+    val clothes: List<Int>
 )
