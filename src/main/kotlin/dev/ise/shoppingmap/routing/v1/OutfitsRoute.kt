@@ -1,5 +1,7 @@
 package dev.ise.shoppingmap.routing.v1
 
+import dev.ise.shoppingmap.client.ImageProcesses
+import dev.ise.shoppingmap.dao.impl.ImageDAOImpl
 import dev.ise.shoppingmap.dao.impl.OutfitDAOImpl
 import dev.ise.shoppingmap.dto.Outfit
 import io.ktor.http.*
@@ -37,8 +39,14 @@ fun Route.outfits() {
                 HttpStatusCode.BadRequest, "Clothes ids cannot be blank"
             )
 
+            val generatedImage = ImageProcesses.generateOutfitImage(outfit.clothes)
+
+            val image = ImageDAOImpl.create(
+                outfit.name, generatedImage
+            )
+
             when (OutfitDAOImpl.create(
-                outfit.name, outfit.description, outfit.clothes, 1
+                outfit.name, outfit.description, outfit.clothes, image
             )) {
                 1 -> call.respond(HttpStatusCode.OK, "Outfit created")
                 else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")
