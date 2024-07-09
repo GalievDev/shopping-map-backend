@@ -21,3 +21,4 @@ shopping-map-backend 1.1.6 Renaming DAO & routes
 shopping-map-backend 1.1.7 Capsules DAO, DTO and routing
 shopping-map-backend 1.1.8 Handling 401 request
 shopping-map-backend 1.1.9 Unit tests
+shopping-map-backend 2.1.9 Added image generating for outfits
