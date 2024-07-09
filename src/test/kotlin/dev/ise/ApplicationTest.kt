@@ -37,9 +37,6 @@ class ApplicationTest {
             println(status)
             assertEquals(HttpStatusCode.OK, status)
         }
-/*        client.post("api/v1/clothes").apply {
-            assertEquals(HttpStatusCode.Created, status)
-        }*/
     }
 
     @Test
@@ -89,7 +86,7 @@ class ApplicationTest {
             contentType(ContentType.Application.Json)
             setBody(
                 ClothRequest("TEST_CLOTH", "TEST_LINK", "TEST_DESCRIPTION",
-                ClothType.NONE, TEST_IMAGE_BYTE_CODE)
+                ClothType.TOP, TEST_IMAGE_BYTE_CODE)
             )
         }.apply {
             assertEquals(HttpStatusCode.OK, status)

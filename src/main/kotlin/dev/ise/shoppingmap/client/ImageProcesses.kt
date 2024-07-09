@@ -33,7 +33,6 @@ object ImageProcesses {
         }
 
         val imageData: Image = Json.decodeFromString(response.bodyAsText())
-        client.close()
 
         return imageData.bytes
     }
@@ -44,7 +43,7 @@ object ImageProcesses {
         val images = mutableListOf<Image>()
 
         clothesIds.forEach {
-            val responseClothes: HttpResponse = client.get("http://0.0.0.0:5252/api/v1/clothes/$it") {
+            val responseClothes: HttpResponse = client.get("$url:5252/api/v1/clothes/$it") {
                 contentType(ContentType.Application.Json)
             }
             val cloth: Cloth = Json.decodeFromString(responseClothes.bodyAsText())
@@ -54,7 +53,7 @@ object ImageProcesses {
         clothes.sortWith(compareBy { typeOrder.indexOf(it.type) })
 
         clothes.forEach{
-            val responseImages: HttpResponse = client.get("http://0.0.0.0:5252/api/v1/images/${it.image_id}") {
+            val responseImages: HttpResponse = client.get("$url:5252/api/v1/images/${it.image_id}") {
                 contentType(ContentType.Application.Json)
             }
 
@@ -62,7 +61,7 @@ object ImageProcesses {
             images.add(image)
         }
 
-        val response: HttpResponse = client.post("http://127.0.0.1:8000/generate_outfit/") {
+        val response: HttpResponse = client.post("$url:5050/generate_outfit/") {
             contentType(ContentType.Application.Json)
             setBody(images)
         }
