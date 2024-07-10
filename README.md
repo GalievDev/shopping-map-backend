@@ -16,17 +16,31 @@ This is the server part of the **shopping map app** which performs the functions
 ## Deployed url
 **There are deployed url of [server](http://10.90.136.54:5252/api/v1/clothes)** 
 
-## Installation
+## Running
+
+Firstly you need have to installed `jdk17`
+
+|OS|Download Away|
+|-|-|
+|Windows|https://adoptium.net/temurin/releases/|
+|Ubuntu|`sudo apt install openjdk-17-jre`|
+|Arch Linux|`sudo pacman -S jre-openjdk`|
 
 Clone the repository: 
 ```bash
 git clone https://gitlab.pg.innopolis.university/ise25/shopping-map-backend
 ```
 
-Open and run with command:
+Build the application:
 
 ```bash
-./gradlew build run
+./gradlew build
+```
+
+And run the `.jar` file:
+
+```bash
+java -jar weather-spring-app-1.0.0.jar
 ```
 
 ## Used technologies
