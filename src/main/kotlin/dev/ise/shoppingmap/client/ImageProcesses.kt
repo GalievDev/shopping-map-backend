@@ -62,7 +62,7 @@ object ImageProcesses {
             images.add(image)
         }
 
-        val response: HttpResponse = client.post("http://127.0.0.1:8000/generate_outfit/") {
+        val response: HttpResponse = client.post("$url:5050/generate_outfit/") {
             contentType(ContentType.Application.Json)
             setBody(clothesRequests)
         }
