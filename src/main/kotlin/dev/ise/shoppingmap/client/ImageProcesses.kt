@@ -1,8 +1,8 @@
 package dev.ise.shoppingmap.client
 
 import dev.ise.shoppingmap.dto.Cloth
-import dev.ise.shoppingmap.dto.ClothType
 import dev.ise.shoppingmap.dto.Image
+import dev.ise.shoppingmap.request.ClothRequest
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -38,8 +38,8 @@ object ImageProcesses {
     }
 
     suspend fun generateOutfitImage(clothesIds: List<Int>): String {
-        val typeOrder = listOf(ClothType.TOP, ClothType.OUTWEAR, ClothType.UNDERWEAR, ClothType.FOOTWEAR, ClothType.ACCESSORY, ClothType.NONE)
         val clothes = mutableListOf<Cloth>()
+        val clothesRequests = mutableListOf<ClothRequest>()
         val images = mutableListOf<Image>()
 
         clothesIds.forEach {
@@ -50,7 +50,6 @@ object ImageProcesses {
             clothes.add(cloth)
         }
 
-        clothes.sortWith(compareBy { typeOrder.indexOf(it.type) })
 
         clothes.forEach{
             val responseImages: HttpResponse = client.get("$url:5252/api/v1/images/${it.image_id}") {
@@ -58,12 +57,14 @@ object ImageProcesses {
             }
 
             val image: Image = Json.decodeFromString(responseImages.bodyAsText())
+            val clothRequest = ClothRequest(it.name, it.link, it.description, it.type, image.bytes)
+            clothesRequests.add(clothRequest)
             images.add(image)
         }
 
-        val response: HttpResponse = client.post("$url:5050/generate_outfit/") {
+        val response: HttpResponse = client.post("http://127.0.0.1:8000/generate_outfit/") {
             contentType(ContentType.Application.Json)
-            setBody(images)
+            setBody(clothesRequests)
         }
 
         val generatedImage: Image = Json.decodeFromString(response.bodyAsText())
