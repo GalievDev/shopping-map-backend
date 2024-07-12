@@ -2,6 +2,7 @@ package dev.ise.shoppingmap.client
 
 import dev.ise.shoppingmap.dto.Cloth
 import dev.ise.shoppingmap.dto.Image
+import dev.ise.shoppingmap.dto.Outfit
 import dev.ise.shoppingmap.request.ClothRequest
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -50,7 +51,6 @@ object ImageProcesses {
             clothes.add(cloth)
         }
 
-
         clothes.forEach{
             val responseImages: HttpResponse = client.get("$url:5252/api/v1/images/${it.image_id}") {
                 contentType(ContentType.Application.Json)
@@ -69,6 +69,37 @@ object ImageProcesses {
 
         val generatedImage: Image = Json.decodeFromString(response.bodyAsText())
 
+        return generatedImage.bytes
+    }
+
+    suspend fun generateCapsuleImage(outfitsIds: List<Int>): String {
+        val outfits = mutableListOf<Outfit>()
+        val images = mutableListOf<Image>()
+
+        outfitsIds.forEach {
+            val responseOutfits: HttpResponse = client.get("$url:5252/api/v1/outfits/$it") {
+                contentType(ContentType.Application.Json)
+            }
+
+            val outfit: Outfit = Json.decodeFromString(responseOutfits.bodyAsText())
+            outfits.add(outfit)
+        }
+
+        outfits.forEach {
+            val responseImages: HttpResponse = client.get("$url:5252/api/v1/images/${it.image_id}") {
+                contentType(ContentType.Application.Json)
+            }
+
+            val image: Image = Json.decodeFromString(responseImages.bodyAsText())
+            images.add(image)
+        }
+
+        val response: HttpResponse = client.post("$url:5050/generate_capsule/") {
+            contentType(ContentType.Application.Json)
+            setBody(images)
+        }
+
+        val generatedImage: Image = Json.decodeFromString(response.bodyAsText())
         return generatedImage.bytes
     }
 }
