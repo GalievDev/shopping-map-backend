@@ -62,6 +62,8 @@ fun Route.outfits() {
                 HttpStatusCode.NotFound, "Outfit not found"
             )
 
+            ImageDAOImpl.delete(outfit.image_id)
+
             when(OutfitDAOImpl.delete(outfit.id)) {
                 1 -> call.respond(HttpStatusCode.OK, "Outfit deleted")
                 else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")

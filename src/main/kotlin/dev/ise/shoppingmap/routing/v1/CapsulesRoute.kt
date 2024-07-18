@@ -1,6 +1,7 @@
 package dev.ise.shoppingmap.routing.v1
 
 import dev.ise.shoppingmap.dao.impl.CapsuleDAOImpl
+import dev.ise.shoppingmap.dao.impl.ImageDAOImpl
 import dev.ise.shoppingmap.dto.Capsule
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -51,6 +52,8 @@ fun Route.capsules() {
             val capsule = CapsuleDAOImpl.getById(id) ?: return@delete call.respond(
                 HttpStatusCode.NotFound, "Capsule not found"
             )
+
+            ImageDAOImpl.delete(capsule.image_id)
 
             when(CapsuleDAOImpl.delete(capsule.id)) {
                 1 -> call.respond(HttpStatusCode.OK, "Capsule deleted")
