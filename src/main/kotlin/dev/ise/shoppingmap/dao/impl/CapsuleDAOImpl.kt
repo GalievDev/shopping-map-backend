@@ -22,6 +22,12 @@ object CapsuleDAOImpl: CapsuleDAO {
 
     override fun delete(id: Int): Int = update("DELETE FROM outfits WHERE id IN($id)")
 
+    override fun deleteOutfit(capsuleId: Int, outfitId: Int): Int = update("DELETE FROM capsules_outfits WHERE capsule_id IN($capsuleId) AND outfit_id IN($outfitId)")
+
+    override fun changeImage(capsuleId: Int, imageId: Int): Int {
+        return update("UPDATE capsules SET image_id = $imageId WHERE id IN($capsuleId)")
+    }
+
     override fun getAll(): List<Capsule> = mutableListOf<Capsule>().apply {
         query("""
                 SELECT o.id, o.name, o.description, o.image_id, ARRAY_AGG(oc.outfit_id) AS outfit_ids FROM capsules o 

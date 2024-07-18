@@ -1,6 +1,7 @@
 package dev.ise.shoppingmap.routing.v1
 
 import dev.ise.shoppingmap.dao.impl.CapsuleDAOImpl
+import dev.ise.shoppingmap.dao.impl.ClothDAOImpl
 import dev.ise.shoppingmap.dao.impl.ImageDAOImpl
 import dev.ise.shoppingmap.dto.Capsule
 import io.ktor.http.*
@@ -59,6 +60,45 @@ fun Route.capsules() {
                 1 -> call.respond(HttpStatusCode.OK, "Capsule deleted")
                 else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")
             }
+        }
+
+        delete("/{capsuleId}/{outfitId}") {
+            val capsuleId = call.parameters["capsuleId"]?.toIntOrNull() ?: return@delete call.respond(
+                HttpStatusCode.BadRequest, "Capsule id must be a number"
+            )
+
+            var capsule = CapsuleDAOImpl.getById(capsuleId) ?: return@delete call.respond(
+                HttpStatusCode.NotFound, "Capsule not found"
+            )
+
+            val outfitId = call.parameters["outfitId"]?.toIntOrNull() ?: return@delete call.respond(
+                HttpStatusCode.BadRequest, "Outfit id must be a number"
+            )
+
+            val outfit = ClothDAOImpl.getById(outfitId) ?: return@delete call.respond(
+                HttpStatusCode.NotFound, "Outfit not found"
+            )
+
+            if (!capsule.outfits.contains(outfitId)) {
+                return@delete call.respond(HttpStatusCode.Conflict, "Outfit not found in capsule")
+            }
+
+            when(CapsuleDAOImpl.deleteOutfit(capsule.id, outfit.id)) {
+                1 -> call.respond(HttpStatusCode.OK, "Outfit removed from capsule")
+                else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")
+            }
+/*
+            val oldImage = capsule.image_id
+            capsule = CapsuleDAOImpl.getById(capsuleId) ?: return@delete call.respond(
+                HttpStatusCode.NotFound, "Capsule not found"
+            )
+
+            val newImage = ImageProcesses.generateCapsuleImage(capsule.outfits)
+
+            val image = ImageDAOImpl.create(capsule.name, newImage)
+
+            OutfitDAOImpl.changeImage(capsule.id, image)
+            ImageDAOImpl.delete(oldImage)*/
         }
     }
 }
