@@ -23,6 +23,12 @@ object OutfitDAOImpl : OutfitDAO {
 
     override fun delete(id: Int): Int = update("DELETE FROM outfits WHERE id IN($id)")
 
+    override fun deleteCloth(outfitId: Int, clothId: Int): Int = update("DELETE FROM outfits_clothes WHERE outfit_id IN($outfitId) AND cloth_id IN($clothId)")
+
+    override fun changeImage(outfitId: Int, imageId: Int): Int {
+        return update("UPDATE outfits SET image_id = $imageId WHERE id IN($outfitId)")
+    }
+
     override fun getAll(): List<Outfit> = mutableListOf<Outfit>().apply {
         query("""
                 SELECT o.id, o.name, o.description, o.image_id, ARRAY_AGG(oc.cloth_id) AS cloth_ids FROM outfits o 
