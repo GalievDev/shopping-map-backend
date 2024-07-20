@@ -74,7 +74,6 @@ object ImageProcesses {
 
     suspend fun generateCapsuleImage(outfitsIds: List<Int>): String {
         val outfits = mutableListOf<Outfit>()
-        val images = mutableListOf<Image>()
 
         outfitsIds.forEach {
             val responseOutfits: HttpResponse = client.get("$url:5252/api/v1/outfits/$it") {
@@ -85,18 +84,9 @@ object ImageProcesses {
             outfits.add(outfit)
         }
 
-        outfits.forEach {
-            val responseImages: HttpResponse = client.get("$url:5252/api/v1/images/${it.image_id}") {
-                contentType(ContentType.Application.Json)
-            }
-
-            val image: Image = Json.decodeFromString(responseImages.bodyAsText())
-            images.add(image)
-        }
-
         val response: HttpResponse = client.post("$url:5050/generate_capsule/") {
             contentType(ContentType.Application.Json)
-            setBody(images)
+            setBody(outfits)
         }
 
         val generatedImage: Image = Json.decodeFromString(response.bodyAsText())

@@ -1,5 +1,6 @@
 package dev.ise.shoppingmap.routing.v1
 
+import dev.ise.shoppingmap.client.ImageProcesses
 import dev.ise.shoppingmap.dao.impl.CapsuleDAOImpl
 import dev.ise.shoppingmap.dao.impl.ClothDAOImpl
 import dev.ise.shoppingmap.dao.impl.ImageDAOImpl
@@ -37,8 +38,14 @@ fun Route.capsules() {
                 HttpStatusCode.BadRequest, "Outfits ids cannot be blank"
             )
 
+            val generatedImage = ImageProcesses.generateCapsuleImage(capsule.outfits)
+
+            val image = ImageDAOImpl.create(
+                capsule.name, generatedImage
+            )
+
             when (CapsuleDAOImpl.create(
-                capsule.name, capsule.description, capsule.outfits, 1
+                capsule.name, capsule.description, capsule.outfits, image
             )) {
                 1 -> call.respond(HttpStatusCode.OK, "Capsule created")
                 else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")
@@ -87,7 +94,6 @@ fun Route.capsules() {
                 1 -> call.respond(HttpStatusCode.OK, "Outfit removed from capsule")
                 else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")
             }
-/*
             val oldImage = capsule.image_id
             capsule = CapsuleDAOImpl.getById(capsuleId) ?: return@delete call.respond(
                 HttpStatusCode.NotFound, "Capsule not found"
@@ -97,8 +103,8 @@ fun Route.capsules() {
 
             val image = ImageDAOImpl.create(capsule.name, newImage)
 
-            OutfitDAOImpl.changeImage(capsule.id, image)
-            ImageDAOImpl.delete(oldImage)*/
+            CapsuleDAOImpl.changeImage(capsule.id, image)
+            ImageDAOImpl.delete(oldImage)
         }
     }
 }
