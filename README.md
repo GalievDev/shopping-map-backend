@@ -19,6 +19,76 @@ This is the server part of the **shopping map app** which performs the functions
 ## Deployement
 This section more oriented **for customer**
 
+<details>
+<summary>SQL Database schema</summary>
+
+```sql
+DROP TABLE IF EXISTS capsules_outfits;
+DROP TABLE IF EXISTS outfits_clothes;
+DROP TABLE IF EXISTS capsules;
+DROP TABLE IF EXISTS outfits;
+DROP TABLE IF EXISTS clothes;
+DROP TABLE IF EXISTS images;
+
+CREATE TABLE images (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    bytes BYTEA NOT NULL
+);
+
+CREATE TABLE clothes (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    link VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    type VARCHAR(255) NOT NULL,
+    image_id INT REFERENCES images(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE outfits (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    image_id INT REFERENCES images(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE capsules (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    image_id INT REFERENCES images(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE outfits_clothes (
+    outfit_id INT,
+    cloth_id INT,
+    PRIMARY KEY (outfit_id, cloth_id),
+    CONSTRAINT fk_outfit
+        FOREIGN KEY (outfit_id)
+            REFERENCES outfits (id)
+            ON DELETE CASCADE,
+    CONSTRAINT fk_cloth
+        FOREIGN KEY (cloth_id)
+            REFERENCES clothes (id)
+            ON DELETE CASCADE
+);
+
+CREATE TABLE capsules_outfits (
+    capsule_id INT,
+    outfit_id INT,
+    PRIMARY KEY (capsule_id, outfit_id),
+    CONSTRAINT fk_capsule
+        FOREIGN KEY (capsule_id)
+            REFERENCES capsules (id)
+            ON DELETE CASCADE,
+    CONSTRAINT fk_outfit
+        FOREIGN KEY (outfit_id)
+            REFERENCES outfits (id)
+            ON DELETE CASCADE
+);
+```
+</details>
+
 Firstly you need have to installed `jdk17`
 
 |OS|Download Away|
