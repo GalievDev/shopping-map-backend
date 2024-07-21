@@ -14,7 +14,7 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 
 object ImageProcesses {
-    private const val url: String = "http://10.90.136.54"
+    private const val URL: String = "http://51.250.36.103"
     private val client: HttpClient = HttpClient(CIO).config {
         install(ContentNegotiation) {
             json(
@@ -28,7 +28,7 @@ object ImageProcesses {
     }
 
     suspend fun remImgBg(image: Image): String {
-        val response: HttpResponse = client.post("$url:5050/rmbg/") {
+        val response: HttpResponse = client.post("$URL:5050/rmbg/") {
             contentType(ContentType.Application.Json)
             setBody(image)
         }
@@ -43,7 +43,7 @@ object ImageProcesses {
         val clothesRequests = mutableListOf<ClothRequest>()
 
         clothesIds.forEach {
-            val responseClothes: HttpResponse = client.get("$url:5252/api/v1/clothes/$it") {
+            val responseClothes: HttpResponse = client.get("$URL:5252/api/v1/clothes/$it") {
                 contentType(ContentType.Application.Json)
             }
             val cloth: Cloth = Json.decodeFromString(responseClothes.bodyAsText())
@@ -51,7 +51,7 @@ object ImageProcesses {
         }
 
         clothes.forEach{
-            val responseImages: HttpResponse = client.get("$url:5252/api/v1/images/${it.image_id}") {
+            val responseImages: HttpResponse = client.get("$URL:5252/api/v1/images/${it.image_id}") {
                 contentType(ContentType.Application.Json)
             }
 
@@ -60,7 +60,7 @@ object ImageProcesses {
             clothesRequests.add(clothRequest)
         }
 
-        val response: HttpResponse = client.post("$url:5050/generate_outfit/") {
+        val response: HttpResponse = client.post("$URL:5050/generate_outfit/") {
             contentType(ContentType.Application.Json)
             setBody(clothesRequests)
         }
@@ -76,7 +76,7 @@ object ImageProcesses {
         val clothesRequests = mutableListOf<ClothRequest>()
 
         outfitsIds.forEach {
-            val responseOutfits: HttpResponse = client.get("$url:5252/api/v1/outfits/$it") {
+            val responseOutfits: HttpResponse = client.get("$URL:5252/api/v1/outfits/$it") {
                 contentType(ContentType.Application.Json)
             }
 
@@ -86,7 +86,7 @@ object ImageProcesses {
 
         outfits.forEach {
             it.clothes.forEach { id ->
-                val responseClothes: HttpResponse = client.get("$url:5252/api/v1/clothes/${id}") {
+                val responseClothes: HttpResponse = client.get("$URL:5252/api/v1/clothes/${id}") {
                     contentType(ContentType.Application.Json)
                 }
 
@@ -96,7 +96,7 @@ object ImageProcesses {
         }
 
         clothes.forEach{
-            val responseImages: HttpResponse = client.get("$url:5252/api/v1/images/${it.image_id}") {
+            val responseImages: HttpResponse = client.get("$URL:5252/api/v1/images/${it.image_id}") {
                 contentType(ContentType.Application.Json)
             }
 
@@ -105,7 +105,7 @@ object ImageProcesses {
             clothesRequests.add(clothRequest)
         }
 
-        val response: HttpResponse = client.post("http://127.0.0.1:8000/generate_capsule/") {
+        val response: HttpResponse = client.post("$URL:5050/generate_capsule/") {
             contentType(ContentType.Application.Json)
             setBody(clothesRequests)
         }
