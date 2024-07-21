@@ -108,7 +108,7 @@ Build the application:
 And run the `.jar` file:
 
 ```bash
-java -jar weather-spring-app-1.0.0.jar
+java -jar shopping-map-1.0.0.jar
 ```
 
 ## Used technologies
