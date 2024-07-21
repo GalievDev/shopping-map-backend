@@ -96,7 +96,7 @@ Firstly you need have to installed `jdk17`
 
 Clone the repository: 
 ```bash
-git clone https://gitlab.pg.innopolis.university/ise25/shopping-map-backend
+git clone https://github.com/GalievDev/shopping-map-backend
 ```
 
 Build the application:
