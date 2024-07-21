@@ -41,7 +41,6 @@ object ImageProcesses {
     suspend fun generateOutfitImage(clothesIds: List<Int>): String {
         val clothes = mutableListOf<Cloth>()
         val clothesRequests = mutableListOf<ClothRequest>()
-        val images = mutableListOf<Image>()
 
         clothesIds.forEach {
             val responseClothes: HttpResponse = client.get("$url:5252/api/v1/clothes/$it") {
@@ -59,7 +58,6 @@ object ImageProcesses {
             val image: Image = Json.decodeFromString(responseImages.bodyAsText())
             val clothRequest = ClothRequest(it.name, it.link, it.description, it.type, image.bytes)
             clothesRequests.add(clothRequest)
-            images.add(image)
         }
 
         val response: HttpResponse = client.post("$url:5050/generate_outfit/") {
@@ -74,6 +72,8 @@ object ImageProcesses {
 
     suspend fun generateCapsuleImage(outfitsIds: List<Int>): String {
         val outfits = mutableListOf<Outfit>()
+        val clothes = mutableListOf<Cloth>()
+        val clothesRequests = mutableListOf<ClothRequest>()
 
         outfitsIds.forEach {
             val responseOutfits: HttpResponse = client.get("$url:5252/api/v1/outfits/$it") {
@@ -84,11 +84,33 @@ object ImageProcesses {
             outfits.add(outfit)
         }
 
-        val response: HttpResponse = client.post("$url:5050/generate_capsule/") {
-            contentType(ContentType.Application.Json)
-            setBody(outfits)
+        outfits.forEach {
+            it.clothes.forEach { id ->
+                val responseClothes: HttpResponse = client.get("$url:5252/api/v1/clothes/${id}") {
+                    contentType(ContentType.Application.Json)
+                }
+
+                val cloth: Cloth = Json.decodeFromString(responseClothes.bodyAsText())
+                clothes.add(cloth)
+            }
         }
 
+        clothes.forEach{
+            val responseImages: HttpResponse = client.get("$url:5252/api/v1/images/${it.image_id}") {
+                contentType(ContentType.Application.Json)
+            }
+
+            val image: Image = Json.decodeFromString(responseImages.bodyAsText())
+            val clothRequest = ClothRequest(it.name, it.link, it.description, it.type, image.bytes)
+            clothesRequests.add(clothRequest)
+        }
+
+        val response: HttpResponse = client.post("http://127.0.0.1:8000/generate_capsule/") {
+            contentType(ContentType.Application.Json)
+            setBody(clothesRequests)
+        }
+
+        println(response.bodyAsText())
         val generatedImage: Image = Json.decodeFromString(response.bodyAsText())
         return generatedImage.bytes
     }
