@@ -4,7 +4,7 @@
 
 ## Description
 This is the server part of the **shopping map app** which performs the functions of adding/taking data from the SQL database and send data to 
-[image-generator-module](https://gitlab.pg.innopolis.university/ise25/image-generator-module) for image processing.
+[image-generator-module](https://github.com/GalievDev/image-generator-module) for image processing.
 
 ## Features
 - Adding clothes
@@ -12,9 +12,6 @@ This is the server part of the **shopping map app** which performs the functions
 - Creating capsules from added outfits
 - Image background removing from added cloth
 - Image generation for outfits and clothes
-
-## Deployed url
-**There are deployed url of [server](http://10.90.136.54:5252/api/v1/clothes)** 
 
 ## Deployement
 This section more oriented **for customer**
