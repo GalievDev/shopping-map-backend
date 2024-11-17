@@ -5,7 +5,7 @@ import kotlin.properties.ReadOnlyProperty
 
 val POSTGRES_USER by environment("postgres")
 val POSTGRES_PASS by environment("")
-val POSTGRES_DB by environment("shopping-map")
+val POSTGRES_DB by environment("shoppingMap")
 val POSTGRES_HOST by environment("localhost")
 val POSTGRES_PORT by environment(5432)
 

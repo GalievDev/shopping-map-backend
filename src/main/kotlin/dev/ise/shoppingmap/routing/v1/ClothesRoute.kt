@@ -1,9 +1,11 @@
 package dev.ise.shoppingmap.routing.v1
 
 import dev.ise.shoppingmap.client.ImageProcesses
-import dev.ise.shoppingmap.dao.impl.ClothDAOImpl
-import dev.ise.shoppingmap.dao.impl.ImageDAOImpl
+import dev.ise.shoppingmap.dto.Cloth
 import dev.ise.shoppingmap.dto.Image
+import dev.ise.shoppingmap.mics.SUCCESS
+import dev.ise.shoppingmap.repository.postgre.PostgresClothRepository
+import dev.ise.shoppingmap.repository.postgre.PostgresImageRepository
 import dev.ise.shoppingmap.request.ClothRequest
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -14,14 +16,14 @@ import io.ktor.server.routing.*
 fun Route.clothes() {
     route("/clothes") {
         get {
-            call.respond(ClothDAOImpl.getAll())
+            call.respond(PostgresClothRepository.getAll())
         }
         get("{id}") {
             val id = call.parameters["id"]?.toIntOrNull() ?: return@get call.respond(
                 HttpStatusCode.BadRequest, "Cloth id must be a number"
             )
 
-            val cloth = ClothDAOImpl.getById(id) ?: return@get call.respond(
+            val cloth = PostgresClothRepository.getById(id) ?: return@get call.respond(
                 HttpStatusCode.NotFound, "Cloth not found"
             )
 
@@ -34,16 +36,16 @@ fun Route.clothes() {
                 HttpStatusCode.BadRequest, "Name cannot be blank"
             )
 
-            val rembgImg = ImageProcesses.remImgBg(Image(1, cloth.name, cloth.image))
+            val rembgImg = ImageProcesses.remImgBg(Image(cloth.name, cloth.image))
 
-            val image = ImageDAOImpl.create(
-                cloth.name, rembgImg
+            val image = PostgresImageRepository.create(
+                Image(cloth.name, rembgImg)
             )
 
-            when(ClothDAOImpl.create(
-                cloth.name, cloth.link, cloth.description, cloth.type, image
+            when(PostgresClothRepository.create(
+                Cloth(cloth.name, cloth.link, cloth.description, cloth.type, image)
             )) {
-                1 -> call.respond(HttpStatusCode.OK, "Cloth created")
+                SUCCESS -> call.respond(HttpStatusCode.OK, "Cloth created")
                 else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")
             }
         }
@@ -52,14 +54,14 @@ fun Route.clothes() {
                 HttpStatusCode.BadRequest, "Cloth id must be a number"
             )
 
-            val cloth = ClothDAOImpl.getById(id) ?: return@delete call.respond(
+            val cloth = PostgresClothRepository.getById(id) ?: return@delete call.respond(
                 HttpStatusCode.NotFound, "Cloth not found"
             )
 
-            ImageDAOImpl.delete(cloth.image_id)
+            PostgresImageRepository.delete(cloth.imageId)
 
-            when(ClothDAOImpl.delete(cloth.id)) {
-                1 -> call.respond(HttpStatusCode.OK, "Cloth deleted")
+            when(PostgresClothRepository.delete(id)) {
+                SUCCESS -> call.respond(HttpStatusCode.OK, "Cloth deleted")
                 else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")
             }
         }

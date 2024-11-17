@@ -1,10 +1,12 @@
 package dev.ise.shoppingmap.routing.v1
 
 import dev.ise.shoppingmap.client.ImageProcesses
-import dev.ise.shoppingmap.dao.impl.CapsuleDAOImpl
-import dev.ise.shoppingmap.dao.impl.ClothDAOImpl
-import dev.ise.shoppingmap.dao.impl.ImageDAOImpl
 import dev.ise.shoppingmap.dto.Capsule
+import dev.ise.shoppingmap.dto.Image
+import dev.ise.shoppingmap.mics.SUCCESS
+import dev.ise.shoppingmap.repository.postgre.PostgresCapsuleRepository
+import dev.ise.shoppingmap.repository.postgre.PostgresImageRepository
+import dev.ise.shoppingmap.repository.postgre.PostgresOutfitRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -14,14 +16,14 @@ import io.ktor.server.routing.*
 fun Route.capsules() {
     route("/capsules") {
         get {
-            call.respond(CapsuleDAOImpl.getAll())
+            call.respond(PostgresCapsuleRepository.getAll())
         }
         get("/{id}") {
             val id = call.parameters["id"]?.toIntOrNull() ?: return@get call.respond(
                 HttpStatusCode.BadRequest, "Capsule id must be a number"
             )
 
-            val capsule = CapsuleDAOImpl.getById(id) ?: return@get call.respond(
+            val capsule = PostgresCapsuleRepository.getById(id) ?: return@get call.respond(
                 HttpStatusCode.NotFound, "Capsule not found"
             )
 
@@ -40,14 +42,14 @@ fun Route.capsules() {
 
             val generatedImage = ImageProcesses.generateCapsuleImage(capsule.outfits)
 
-            val image = ImageDAOImpl.create(
-                capsule.name, generatedImage
+            val image = PostgresImageRepository.create(
+                Image(capsule.name, generatedImage)
             )
 
-            when (CapsuleDAOImpl.create(
-                capsule.name, capsule.description, capsule.outfits, image
+            when (PostgresCapsuleRepository.create(
+                Capsule(capsule.name, capsule.description, image, capsule.outfits)
             )) {
-                1 -> call.respond(HttpStatusCode.OK, "Capsule created")
+                SUCCESS -> call.respond(HttpStatusCode.OK, "Capsule created")
                 else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")
             }
         }
@@ -57,14 +59,14 @@ fun Route.capsules() {
                 HttpStatusCode.BadRequest, "Capsule id must be a number"
             )
 
-            val capsule = CapsuleDAOImpl.getById(id) ?: return@delete call.respond(
+            val capsule = PostgresCapsuleRepository.getById(id) ?: return@delete call.respond(
                 HttpStatusCode.NotFound, "Capsule not found"
             )
 
-            ImageDAOImpl.delete(capsule.image_id)
+            PostgresImageRepository.delete(capsule.imageId)
 
-            when(CapsuleDAOImpl.delete(capsule.id)) {
-                1 -> call.respond(HttpStatusCode.OK, "Capsule deleted")
+            when(PostgresCapsuleRepository.delete(id)) {
+                SUCCESS -> call.respond(HttpStatusCode.OK, "Capsule deleted")
                 else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")
             }
         }
@@ -74,7 +76,7 @@ fun Route.capsules() {
                 HttpStatusCode.BadRequest, "Capsule id must be a number"
             )
 
-            var capsule = CapsuleDAOImpl.getById(capsuleId) ?: return@delete call.respond(
+            var capsule = PostgresCapsuleRepository.getById(capsuleId) ?: return@delete call.respond(
                 HttpStatusCode.NotFound, "Capsule not found"
             )
 
@@ -82,7 +84,7 @@ fun Route.capsules() {
                 HttpStatusCode.BadRequest, "Outfit id must be a number"
             )
 
-            val outfit = ClothDAOImpl.getById(outfitId) ?: return@delete call.respond(
+            PostgresOutfitRepository.getById(outfitId) ?: return@delete call.respond(
                 HttpStatusCode.NotFound, "Outfit not found"
             )
 
@@ -90,21 +92,21 @@ fun Route.capsules() {
                 return@delete call.respond(HttpStatusCode.Conflict, "Outfit not found in capsule")
             }
 
-            when(CapsuleDAOImpl.deleteOutfit(capsule.id, outfit.id)) {
-                1 -> call.respond(HttpStatusCode.OK, "Outfit removed from capsule")
+            when(PostgresCapsuleRepository.deleteOutfit(capsuleId, outfitId)) {
+                SUCCESS -> call.respond(HttpStatusCode.OK, "Outfit removed from capsule")
                 else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")
             }
-            val oldImage = capsule.image_id
-            capsule = CapsuleDAOImpl.getById(capsuleId) ?: return@delete call.respond(
+            val oldImage = capsule.imageId
+            capsule = PostgresCapsuleRepository.getById(capsuleId) ?: return@delete call.respond(
                 HttpStatusCode.NotFound, "Capsule not found"
             )
 
             val newImage = ImageProcesses.generateCapsuleImage(capsule.outfits)
 
-            val image = ImageDAOImpl.create(capsule.name, newImage)
+            val image = PostgresImageRepository.create(Image(capsule.name, newImage))
 
-            CapsuleDAOImpl.changeImage(capsule.id, image)
-            ImageDAOImpl.delete(oldImage)
+            PostgresCapsuleRepository.changeImage(capsuleId, image)
+            PostgresImageRepository.delete(oldImage)
         }
     }
 }

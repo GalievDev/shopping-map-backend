@@ -51,7 +51,7 @@ object ImageProcesses {
         }
 
         clothes.forEach{
-            val responseImages: HttpResponse = client.get("$URL:5252/api/v1/images/${it.image_id}") {
+            val responseImages: HttpResponse = client.get("$URL:5252/api/v1/images/${it.imageId}") {
                 contentType(ContentType.Application.Json)
             }
 
@@ -96,7 +96,7 @@ object ImageProcesses {
         }
 
         clothes.forEach{
-            val responseImages: HttpResponse = client.get("$URL:5252/api/v1/images/${it.image_id}") {
+            val responseImages: HttpResponse = client.get("$URL:5252/api/v1/images/${it.imageId}") {
                 contentType(ContentType.Application.Json)
             }
 

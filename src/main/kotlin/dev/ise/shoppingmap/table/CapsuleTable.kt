@@ -1,0 +1,10 @@
+package dev.ise.shoppingmap.table
+
+import org.jetbrains.exposed.dao.id.IntIdTable
+import org.jetbrains.exposed.sql.ReferenceOption
+
+object CapsuleTable: IntIdTable("capsules") {
+    val name = varchar("name", 255)
+    val description = varchar("description", 255)
+    val imageId = integer("imageId").references(ImageTable.id, ReferenceOption.CASCADE, ReferenceOption.CASCADE)
+}
