@@ -3,12 +3,23 @@ package dev.ise.shoppingmap.mics
 import io.github.cdimascio.dotenv.dotenv
 import kotlin.properties.ReadOnlyProperty
 
-val POSTGRES_USER by environment("postgres")
-val POSTGRES_PASS by environment("")
+val POSTGRES_USER by environment("shoppingMap")
+val POSTGRES_PASS by environment("shoppingMap")
 val POSTGRES_DB by environment("shoppingMap")
 val POSTGRES_HOST by environment("localhost")
 val POSTGRES_PORT by environment(5432)
 
 inline fun <reified T : Any> environment(defaultValue: T): ReadOnlyProperty<Any?, T> = ReadOnlyProperty { _, property ->
-    dotenv { ignoreIfMissing = true }[property.name] as? T ?: System.getenv(property.name) as? T ?: defaultValue
+    val envValue = System.getProperty(property.name) ?: dotenv { ignoreIfMissing = true }[property.name]
+    ?: System.getenv(property.name)
+
+    when (T::class) {
+        String::class -> envValue ?: defaultValue
+        Int::class -> envValue?.toIntOrNull() ?: defaultValue
+        Long::class -> envValue?.toLongOrNull() ?: defaultValue
+        Boolean::class -> envValue?.toBooleanStrictOrNull() ?: defaultValue
+        Double::class -> envValue?.toDoubleOrNull() ?: defaultValue
+        Float::class -> envValue?.toFloatOrNull() ?: defaultValue
+        else -> defaultValue
+    } as T
 }
