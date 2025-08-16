@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  postgres-shopping-map:
+    env_file:
+      - ".env"
+    image: postgres
+    container_name: postgres-shopping-map
+    ports:
+      - "5435:5432"
+    environment:
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+    healthcheck:
+      test: "pg_isready -U $(POSTGRES_USER)"
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres_shopping_map_data:/var/lib/postgresql/data
+volumes:
+  postgres_shopping_map_data:
