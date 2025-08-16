@@ -12,7 +12,7 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.postgresql.shaded.com.ongres.scram.common.bouncycastle.base64.Base64.decode
 
-object PostgresImageRepository: ImageRepository{
+object PostgresImageRepository: ImageRepository {
     override suspend fun create(image: Image): Int = dbQuery {
         val insertResult = ImageTable.insert {
             it[name] = image.name
@@ -28,7 +28,7 @@ object PostgresImageRepository: ImageRepository{
 
     override suspend fun getById(id: Int): Image? = dbQuery {
         ImageTable.selectAll().where { ImageTable.id eq id }
-            .map { Image::fromResultRow }.singleOrNull()
+            .map(Image::fromResultRow).singleOrNull()
     }
 
 }

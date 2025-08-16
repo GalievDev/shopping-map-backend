@@ -12,7 +12,7 @@ data class Image(
     companion object {
         fun fromResultRow(row: ResultRow): Image = Image(
             name = row[ImageTable.name],
-            bytes = row[ImageTable.bytes]
+            bytes = row[ImageTable.bytes].toString()
         )
     }
 }
