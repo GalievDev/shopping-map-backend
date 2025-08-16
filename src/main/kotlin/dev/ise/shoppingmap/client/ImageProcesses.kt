@@ -3,7 +3,7 @@ package dev.ise.shoppingmap.client
 import dev.ise.shoppingmap.dto.Cloth
 import dev.ise.shoppingmap.dto.Image
 import dev.ise.shoppingmap.dto.Outfit
-import dev.ise.shoppingmap.request.ClothRequest
+import dev.ise.shoppingmap.dto.request.ClothRequest
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*

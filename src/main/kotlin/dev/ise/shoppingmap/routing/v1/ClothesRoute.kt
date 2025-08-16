@@ -6,7 +6,7 @@ import dev.ise.shoppingmap.dto.Image
 import dev.ise.shoppingmap.mics.SUCCESS
 import dev.ise.shoppingmap.repository.postgre.PostgresClothRepository
 import dev.ise.shoppingmap.repository.postgre.PostgresImageRepository
-import dev.ise.shoppingmap.request.ClothRequest
+import dev.ise.shoppingmap.dto.request.ClothRequest
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*

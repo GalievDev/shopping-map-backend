@@ -1,4 +1,4 @@
-package dev.ise.shoppingmap.request
+package dev.ise.shoppingmap.dto.request
 
 import dev.ise.shoppingmap.dto.ClothType
 import kotlinx.serialization.Serializable
