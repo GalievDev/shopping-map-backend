@@ -43,7 +43,7 @@ fun Route.clothes() {
             )
 
             when(PostgresClothRepository.create(
-                Cloth(cloth.name, cloth.link, cloth.description, cloth.type, image)
+                Cloth(-1, cloth.name, cloth.link, cloth.description, cloth.type, image)
             )) {
                 SUCCESS -> call.respond(HttpStatusCode.OK, "Cloth created")
                 else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")

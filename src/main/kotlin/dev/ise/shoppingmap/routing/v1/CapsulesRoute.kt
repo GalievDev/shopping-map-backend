@@ -47,7 +47,7 @@ fun Route.capsules() {
             )
 
             when (PostgresCapsuleRepository.create(
-                Capsule(capsule.name, capsule.description, image, capsule.outfits)
+                Capsule(-1, capsule.name, capsule.description, image, capsule.outfits)
             )) {
                 SUCCESS -> call.respond(HttpStatusCode.OK, "Capsule created")
                 else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")

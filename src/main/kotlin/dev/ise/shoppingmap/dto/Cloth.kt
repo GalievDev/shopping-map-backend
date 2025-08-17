@@ -6,6 +6,7 @@ import org.jetbrains.exposed.sql.ResultRow
 
 @Serializable
 data class Cloth(
+    val id: Int = -1,
     val name: String = "",
     val link: String = "",
     val description: String = "",
@@ -14,11 +15,12 @@ data class Cloth(
 ) {
     companion object {
         fun fromResultRow(row: ResultRow): Cloth = Cloth(
+            id = row[ClothTable.id].value,
             name = row[ClothTable.name],
             link = row[ClothTable.link],
             description = row[ClothTable.description],
             type = ClothType.valueOf(row[ClothTable.type]),
-            imageId = row[ClothTable.imageId].toInt()
+            imageId = row[ClothTable.imageId]
         )
     }
 }

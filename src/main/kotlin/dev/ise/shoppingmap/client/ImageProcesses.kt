@@ -91,7 +91,6 @@ object ImageProcesses {
             setBody(clothesRequests)
         }
 
-        println(response.bodyAsText())
         val generatedImage: Image = Json.decodeFromString(response.bodyAsText())
         return generatedImage.bytes
     }

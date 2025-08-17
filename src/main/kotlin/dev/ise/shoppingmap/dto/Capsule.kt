@@ -9,6 +9,7 @@ import org.jetbrains.exposed.sql.selectAll
 
 @Serializable
 data class Capsule(
+    val id: Int = -1,
     val name: String = "",
     val description: String = "",
     val imageId: Int = -1,
@@ -19,6 +20,7 @@ data class Capsule(
             val outfits = CapsulesOutfits.selectAll().where { CapsulesOutfits.capsuleId eq row[CapsuleTable.id] }
                 .map { it[ClothTable.id].value }.toList()
             return Capsule(
+                id = row[CapsuleTable.id].value,
                 name = row[CapsuleTable.name],
                 description = row[CapsuleTable.description],
                 imageId = row[CapsuleTable.imageId],
