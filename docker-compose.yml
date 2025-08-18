@@ -1,6 +1,13 @@
 version: "3.8"
 
 services:
+  shopping-map:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres-shopping-map:
+        condition: service_healthy
   postgres-shopping-map:
     env_file:
       - ".env"
