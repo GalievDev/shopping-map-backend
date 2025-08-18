@@ -1,10 +1,15 @@
-version: "3.8"
-
 services:
   shopping-map:
     build: .
     ports:
-      - "8080:8080"
+      - "5252:5252"
+    environment:
+      - POSTGRES_HOST
+      - POSTGRES_PORT
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASS
+      - IMAGE_MODULE_URL
     depends_on:
       postgres-shopping-map:
         condition: service_healthy
@@ -14,13 +19,13 @@ services:
     image: postgres
     container_name: postgres-shopping-map
     ports:
-      - "5435:5432"
+      - "5432:5432"
     environment:
       - POSTGRES_DB
       - POSTGRES_USER
-      - POSTGRES_PASSWORD
+      - POSTGRES_PASS
     healthcheck:
-      test: "pg_isready -U $(POSTGRES_USER)"
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
       interval: 5s
       timeout: 5s
       retries: 5
