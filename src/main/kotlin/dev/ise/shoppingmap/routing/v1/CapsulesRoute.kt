@@ -7,8 +7,8 @@ import dev.ise.shoppingmap.mics.SUCCESS
 import dev.ise.shoppingmap.repository.postgre.PostgresCapsuleRepository
 import dev.ise.shoppingmap.repository.postgre.PostgresImageRepository
 import dev.ise.shoppingmap.repository.postgre.PostgresOutfitRepository
+import dev.ise.shoppingmap.service.PdfGenerator
 import io.ktor.http.*
-import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -28,6 +28,25 @@ fun Route.capsules() {
             )
 
             call.respond(capsule)
+        }
+        get("/{id}/pdf") {
+            val id = call.parameters["id"]?.toIntOrNull() ?: return@get call.respond(
+                HttpStatusCode.BadRequest, "Capsule id must be a number"
+            )
+
+            val capsule = PostgresCapsuleRepository.getById(id) ?: return@get call.respond(
+                HttpStatusCode.NotFound, "Capsule not found"
+            )
+
+            val pdf = PdfGenerator.generateCapsulePDF(capsule)
+            call.response.header(
+                HttpHeaders.ContentDisposition,
+                ContentDisposition.Attachment.withParameter(ContentDisposition.Parameters.FileName, "${capsule.name}.pdf").toString()
+            )
+            call.respondBytes(
+                pdf,
+                contentType = ContentType.Application.Pdf
+            )
         }
         post {
             val capsule = call.receive<Capsule>()

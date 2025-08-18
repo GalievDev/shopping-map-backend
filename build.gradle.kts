@@ -42,6 +42,8 @@ dependencies {
     implementation("com.h2database:h2:$h2_version")
     implementation("io.ktor:ktor-server-netty-jvm")
     implementation("ch.qos.logback:logback-classic:$logback_version")
+    implementation("com.itextpdf:itextpdf:5.5.13.4")
+    implementation("org.apache.pdfbox:pdfbox:3.0.5")
     testImplementation("org.jetbrains.kotlin:kotlin-test:2.1.21")
 
     testImplementation("io.ktor:ktor-server-test-host")
