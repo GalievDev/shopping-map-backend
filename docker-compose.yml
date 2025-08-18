@@ -13,6 +13,8 @@ services:
     depends_on:
       postgres-shopping-map:
         condition: service_healthy
+    networks:
+      - app-network
   postgres-shopping-map:
     env_file:
       - ".env"
@@ -31,5 +33,12 @@ services:
       retries: 5
     volumes:
       - postgres_shopping_map_data:/var/lib/postgresql/data
+    networks:
+      - app-network
 volumes:
   postgres_shopping_map_data:
+
+networks:
+  app-network:
+    name: app-network
+    external: true
