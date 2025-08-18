@@ -5,9 +5,10 @@ val h2_version: String by project
 val exposed_version: String by project
 
 plugins {
+    application
     kotlin("jvm") version "2.0.0"
-    id("io.ktor.plugin") version "2.3.11"
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.0"
+    id("io.ktor.plugin") version "3.2.3"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.1.20"
 }
 
 group = "dev.ise"
@@ -41,6 +42,10 @@ dependencies {
     implementation("com.h2database:h2:$h2_version")
     implementation("io.ktor:ktor-server-netty-jvm")
     implementation("ch.qos.logback:logback-classic:$logback_version")
-    testImplementation("io.ktor:ktor-server-tests-jvm")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    testImplementation("org.jetbrains.kotlin:kotlin-test:2.1.21")
+
+    testImplementation("io.ktor:ktor-server-test-host")
+    testImplementation("io.ktor:ktor-client-content-negotiation")
+
+    testImplementation("org.junit.platform:junit-platform-suite:1.13.0-M3")
 }
