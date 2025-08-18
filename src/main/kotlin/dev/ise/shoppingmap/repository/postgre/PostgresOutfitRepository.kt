@@ -17,7 +17,7 @@ object PostgresOutfitRepository: OutfitRepository {
             it[description] = outfit.description
             it[imageId] = outfit.imageId
         }
-        for (id in outfit.clothes) {
+        outfit.clothes.forEach { id ->
             OutfitsClothes.insert {
                 it[outfitId] = insertOutfit[OutfitTable.id].value
                 it[clothId] = id

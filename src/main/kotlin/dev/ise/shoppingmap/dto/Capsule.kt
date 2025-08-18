@@ -1,7 +1,6 @@
 package dev.ise.shoppingmap.dto
 
 import dev.ise.shoppingmap.table.CapsuleTable
-import dev.ise.shoppingmap.table.ClothTable
 import dev.ise.shoppingmap.table.relation.CapsulesOutfits
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.ResultRow
@@ -18,7 +17,7 @@ data class Capsule(
     companion object {
         fun fromResultRow(row: ResultRow): Capsule {
             val outfits = CapsulesOutfits.selectAll().where { CapsulesOutfits.capsuleId eq row[CapsuleTable.id] }
-                .map { it[ClothTable.id].value }.toList()
+                .map { it[CapsulesOutfits.outfitId].value }.toList()
             return Capsule(
                 id = row[CapsuleTable.id].value,
                 name = row[CapsuleTable.name],

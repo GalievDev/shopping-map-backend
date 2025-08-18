@@ -1,6 +1,5 @@
 package dev.ise.shoppingmap.dto
 
-import dev.ise.shoppingmap.table.ClothTable
 import dev.ise.shoppingmap.table.OutfitTable
 import dev.ise.shoppingmap.table.relation.OutfitsClothes
 import kotlinx.serialization.Serializable
@@ -18,7 +17,7 @@ data class Outfit(
     companion object {
         fun fromResultRow(row: ResultRow): Outfit {
             val clothes = OutfitsClothes.selectAll().where { OutfitsClothes.outfitId eq row[OutfitTable.id] }
-                .map { it[ClothTable.id].value }.toList()
+                .map { it[OutfitsClothes.clothId].value }.toList()
             return Outfit(
                 id = row[OutfitTable.id].value,
                 name = row[OutfitTable.name],

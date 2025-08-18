@@ -17,7 +17,7 @@ object PostgresCapsuleRepository: CapsuleRepository {
             it[description] = capsule.description
             it[imageId] = capsule.imageId
         }
-        for (id in capsule.outfits) {
+        capsule.outfits.forEach { id ->
             CapsulesOutfits.insert {
                 it[capsuleId] = insertCapsule[CapsuleTable.id].value
                 it[outfitId] = id
