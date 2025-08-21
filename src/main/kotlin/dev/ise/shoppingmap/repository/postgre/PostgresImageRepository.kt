@@ -6,17 +6,17 @@ import dev.ise.shoppingmap.mics.SUCCESS
 import dev.ise.shoppingmap.mics.dbQuery
 import dev.ise.shoppingmap.repository.ImageRepository
 import dev.ise.shoppingmap.table.ImageTable
+import io.ktor.util.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
-import org.postgresql.shaded.com.ongres.scram.common.bouncycastle.base64.Base64.decode
 
 object PostgresImageRepository: ImageRepository {
     override suspend fun create(image: Image): Int = dbQuery {
         val insertResult = ImageTable.insert {
             it[name] = image.name
-            it[bytes] = decode(image.bytes)
+            it[bytes] = image.bytes.decodeBase64Bytes()
         }
         insertResult[ImageTable.id].value
     }
