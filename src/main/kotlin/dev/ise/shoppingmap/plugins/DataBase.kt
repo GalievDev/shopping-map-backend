@@ -24,11 +24,8 @@ fun configureDataBase() {
     }))
 
     transaction {
-        SchemaUtils.create(ImageTable)
-        SchemaUtils.create(ClothTable)
-        SchemaUtils.create(OutfitTable)
-        SchemaUtils.create(OutfitsClothes)
-        SchemaUtils.create(CapsuleTable)
-        SchemaUtils.create(CapsulesOutfits)
+        SchemaUtils.create(
+            ImageTable, ClothTable, OutfitTable, OutfitsClothes, CapsuleTable, CapsulesOutfits
+        )
     }
 }
