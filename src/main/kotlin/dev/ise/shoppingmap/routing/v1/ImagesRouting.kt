@@ -2,7 +2,6 @@ package dev.ise.shoppingmap.routing.v1
 
 import dev.ise.shoppingmap.repository.postgre.PostgresImageRepository
 import io.ktor.http.*
-import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
@@ -13,11 +12,11 @@ fun Route.images() {
                 HttpStatusCode.BadRequest, "Image id must be a number"
             )
 
-            val cloth = PostgresImageRepository.getById(id) ?: return@get call.respond(
+            val image = PostgresImageRepository.getById(id) ?: return@get call.respond(
                 HttpStatusCode.NotFound, "Image not found"
             )
 
-            call.respond(cloth)
+            call.respond(image)
         }
     }
 }
