@@ -3,12 +3,11 @@ package dev.ise.shoppingmap.routing.v1
 import dev.ise.shoppingmap.client.ImageProcesses
 import dev.ise.shoppingmap.dto.Cloth
 import dev.ise.shoppingmap.dto.Image
+import dev.ise.shoppingmap.dto.request.ClothRequest
 import dev.ise.shoppingmap.mics.SUCCESS
 import dev.ise.shoppingmap.repository.postgre.PostgresClothRepository
 import dev.ise.shoppingmap.repository.postgre.PostgresImageRepository
-import dev.ise.shoppingmap.dto.request.ClothRequest
 import io.ktor.http.*
-import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*

@@ -9,12 +9,11 @@ import dev.ise.shoppingmap.table.ImageTable
 import dev.ise.shoppingmap.table.OutfitTable
 import dev.ise.shoppingmap.table.relation.CapsulesOutfits
 import dev.ise.shoppingmap.table.relation.OutfitsClothes
-import io.ktor.server.application.*
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 
-fun Application.configureDataBase() {
+fun configureDataBase() {
     Database.connect(HikariDataSource(HikariConfig().apply {
         driverClassName = "org.postgresql.Driver"
         jdbcUrl = "jdbc:postgresql://$POSTGRES_HOST:$POSTGRES_PORT/$POSTGRES_DB"
