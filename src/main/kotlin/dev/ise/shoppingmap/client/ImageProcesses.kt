@@ -30,7 +30,7 @@ object ImageProcesses {
             )
         }
         install(HttpTimeout) {
-            requestTimeoutMillis = 100000
+            requestTimeoutMillis = 2 * 60 * 1000
         }
     }
 
