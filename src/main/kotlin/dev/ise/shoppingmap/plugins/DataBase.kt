@@ -11,6 +11,7 @@ import dev.ise.shoppingmap.table.relation.CapsulesOutfits
 import dev.ise.shoppingmap.table.relation.OutfitsClothes
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 
 fun configureDataBase() {
@@ -27,5 +28,9 @@ fun configureDataBase() {
         SchemaUtils.create(
             ImageTable, ClothTable, OutfitTable, OutfitsClothes, CapsuleTable, CapsulesOutfits
         )
+        ImageTable.insert {
+            it[name] = "default_image"
+            it[bytes] = object {}.javaClass.getResourceAsStream("/default/default.jpg")!!.readAllBytes()
+        }
     }
 }

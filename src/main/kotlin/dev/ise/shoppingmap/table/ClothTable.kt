@@ -8,5 +8,5 @@ object ClothTable: IntIdTable("clothes") {
     val link = varchar("link", 255)
     val description = varchar("description", 255)
     val type = varchar("type", 50)
-    val imageId = integer("imageId").references(ImageTable.id, ReferenceOption.CASCADE, ReferenceOption.CASCADE)
+    val imageId = integer("imageId").references(ImageTable.id, ReferenceOption.SET_DEFAULT, ReferenceOption.CASCADE).default(1)
 }
