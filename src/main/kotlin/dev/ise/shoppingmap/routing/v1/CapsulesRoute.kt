@@ -68,7 +68,7 @@ fun Route.capsules() {
             when (PostgresCapsuleRepository.create(
                 Capsule(-1, capsule.name, capsule.description, image, capsule.outfits)
             )) {
-                SUCCESS -> call.respond(HttpStatusCode.OK, "Capsule created")
+                SUCCESS -> call.respond(HttpStatusCode.Created, "Capsule created")
                 else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")
             }
         }
@@ -85,7 +85,7 @@ fun Route.capsules() {
             PostgresImageRepository.delete(capsule.imageId)
 
             when(PostgresCapsuleRepository.delete(id)) {
-                SUCCESS -> call.respond(HttpStatusCode.OK, "Capsule deleted")
+                SUCCESS -> call.respond(HttpStatusCode.Accepted, "Capsule deleted")
                 else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")
             }
         }
@@ -126,6 +126,8 @@ fun Route.capsules() {
 
             PostgresCapsuleRepository.changeImage(capsuleId, image)
             PostgresImageRepository.delete(oldImage)
+
+            call.respond(HttpStatusCode.Accepted, "Outfit $outfitId deleted from Capsule ${capsule.name}")
         }
     }
 }

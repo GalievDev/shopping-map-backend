@@ -50,7 +50,7 @@ fun Route.outfits() {
             when (PostgresOutfitRepository.create(
                 Outfit(-1, outfit.name, outfit.description, image, outfit.clothes)
             )) {
-                SUCCESS -> call.respond(HttpStatusCode.OK, "Outfit created")
+                SUCCESS -> call.respond(HttpStatusCode.Created, "Outfit created")
                 else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")
             }
         }
@@ -67,7 +67,7 @@ fun Route.outfits() {
             PostgresImageRepository.delete(outfit.imageId)
 
             when(PostgresOutfitRepository.delete(id)) {
-                SUCCESS -> call.respond(HttpStatusCode.OK, "Outfit deleted")
+                SUCCESS -> call.respond(HttpStatusCode.Accepted, "Outfit deleted")
                 else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")
             }
         }
@@ -109,6 +109,8 @@ fun Route.outfits() {
 
             PostgresOutfitRepository.changeImage(outfitId, image)
             PostgresImageRepository.delete(oldImage)
+
+            call.respond(HttpStatusCode.Accepted, "Cloth $clothId deleted from Outfit ${outfit.name}")
         }
     }
 }
