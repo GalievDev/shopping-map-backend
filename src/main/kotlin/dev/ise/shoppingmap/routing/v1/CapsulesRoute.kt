@@ -112,7 +112,7 @@ fun Route.capsules() {
             }
 
             when(PostgresCapsuleRepository.deleteOutfit(capsuleId, outfitId)) {
-                SUCCESS -> call.respond(HttpStatusCode.OK, "Outfit removed from capsule")
+                SUCCESS -> call.respond(HttpStatusCode.Accepted, "Outfit $outfitId deleted from Capsule ${capsule.name}")
                 else -> call.respond(HttpStatusCode.BadRequest, "Something went wrong")
             }
             val oldImage = capsule.imageId
@@ -126,8 +126,6 @@ fun Route.capsules() {
 
             PostgresCapsuleRepository.changeImage(capsuleId, image)
             PostgresImageRepository.delete(oldImage)
-
-            call.respond(HttpStatusCode.Accepted, "Outfit $outfitId deleted from Capsule ${capsule.name}")
         }
     }
 }
