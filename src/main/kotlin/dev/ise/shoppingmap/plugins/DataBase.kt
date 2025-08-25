@@ -18,7 +18,7 @@ fun configureDataBase() {
         driverClassName = "org.postgresql.Driver"
         jdbcUrl = "jdbc:postgresql://$POSTGRES_HOST:$POSTGRES_PORT/$POSTGRES_DB"
         username = POSTGRES_USER
-        password = POSTGRES_PASS
+        password = POSTGRES_PASSWORD
         transactionIsolation = "TRANSACTION_REPEATABLE_READ"
         validate()
     }))

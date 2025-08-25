@@ -4,7 +4,7 @@ import io.github.cdimascio.dotenv.dotenv
 import kotlin.properties.ReadOnlyProperty
 
 val POSTGRES_USER by environment("shoppingMap")
-val POSTGRES_PASS by environment("shoppingMap")
+val POSTGRES_PASSWORD by environment("shoppingMap")
 val POSTGRES_DB by environment("shoppingMap")
 val POSTGRES_HOST by environment("localhost")
 val POSTGRES_PORT by environment(5432)
