@@ -3,6 +3,7 @@ val logback_version: String by project
 val postgres_version: String by project
 val h2_version: String by project
 val exposed_version: String by project
+val ktor_version: String by project
 
 plugins {
     application
@@ -20,6 +21,16 @@ application {
 
 repositories {
     mavenCentral()
+}
+
+tasks {
+    test {
+        useJUnitPlatform {
+            excludeEngines("junit-jupiter")
+            includeEngines("junit-platform-suite")
+        }
+        maxHeapSize = "4096m"
+    }
 }
 
 dependencies {
@@ -44,10 +55,14 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("com.itextpdf:itextpdf:5.5.13.4")
     implementation("org.apache.pdfbox:pdfbox:3.0.5")
+
     testImplementation("org.jetbrains.kotlin:kotlin-test:2.1.21")
 
-    testImplementation("io.ktor:ktor-server-test-host")
-    testImplementation("io.ktor:ktor-client-content-negotiation")
+    testImplementation("io.ktor:ktor-server-test-host:$ktor_version")
+    testImplementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
 
     testImplementation("org.junit.platform:junit-platform-suite:1.13.0-M3")
+
+    testImplementation("org.testcontainers:testcontainers:1.21.0")
+    testImplementation("org.testcontainers:postgresql:1.21.0")
 }
