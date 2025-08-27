@@ -9,6 +9,7 @@ val POSTGRES_DB by environment("shoppingMap")
 val POSTGRES_HOST by environment("localhost")
 val POSTGRES_PORT by environment(5432)
 val IMAGE_MODULE_URL by environment("http://localhost:8000")
+val CORES by environment(Runtime.getRuntime().availableProcessors())
 
 inline fun <reified T : Any> environment(defaultValue: T): ReadOnlyProperty<Any?, T> = ReadOnlyProperty { _, property ->
     val envValue = System.getProperty(property.name) ?: dotenv { ignoreIfMissing = true }[property.name]

@@ -20,6 +20,7 @@ fun configureDataBase() {
         jdbcUrl = "jdbc:postgresql://$POSTGRES_HOST:$POSTGRES_PORT/$POSTGRES_DB"
         username = POSTGRES_USER
         password = POSTGRES_PASSWORD
+        maximumPoolSize = CORES
         transactionIsolation = "TRANSACTION_REPEATABLE_READ"
         validate()
     }))
