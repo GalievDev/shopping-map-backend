@@ -32,9 +32,8 @@ object PdfGenerator {
         val image = Image.getInstance(imageByte)
         image.scaleToFit(150f, 150f)
 
-        val mainTable = PdfPTable(2)
+        val mainTable = PdfPTable(1)
         mainTable.widthPercentage = 100f
-        mainTable.setWidths(floatArrayOf(2f, 2f))
 
         val imageCell = PdfPCell(image, true)
         imageCell.border = PdfPCell.NO_BORDER
@@ -43,12 +42,12 @@ object PdfGenerator {
         val infoTable = PdfPTable(1)
         infoTable.widthPercentage = 100f
 
-        infoTable.addCell(noBorderCell("Description: ${capsule.description}"))
+        infoTable.addCell(noBorderCell(capsule.description))
 
         infoTable.addCell(noBorderCell("Contains outfits:"))
         capsule.outfits.forEach { outfitId ->
             val outfit = PostgresOutfitRepository.getById(outfitId)!!
-            infoTable.addCell(noBorderCell("Outfit: ${outfit.name}"))
+            infoTable.addCell(noBorderCell(outfit.name))
 
             outfit.clothes.forEach { clothId ->
                 val cloth = PostgresClothRepository.getById(clothId)!!
